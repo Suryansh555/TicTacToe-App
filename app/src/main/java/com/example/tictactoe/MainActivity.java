@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -25,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     final Context context = this;
     String Player1 ;
     String Player2 ;
-    Button btn1,btn2,btn3,btn4,btn5,btn6,btn7,btn8,btn9 ;
+    Button btn1,btn2,btn3,btn4,btn5,btn6,btn7,btn8,btn9,Reset ;
     TextView Output ;
     int ActivePlayer = 0;
 
@@ -87,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn8 = findViewById(R.id.btn8);
         btn9 = findViewById(R.id.btn9);
         Output = findViewById(R.id.Output);
+        Reset = findViewById(R.id.ResetButton);
 
 
         btn1.setOnClickListener(this);
@@ -98,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn7.setOnClickListener(this);
         btn8.setOnClickListener(this);
         btn9.setOnClickListener(this);
+        Reset.setOnClickListener(this);
 
         // Output.setText(Player1 + " Plays");
 
@@ -105,9 +108,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
     public String check(){
-        if(ActivePlayer == 9){
-            return "  ";
-        }
         if((btn1.getText().equals(btn2.getText())) && (btn1.getText().equals(btn3.getText()))){
             if(btn1.getText() == "X")
                 Toast.makeText(this,Player1 + " " + "Wins",Toast.LENGTH_LONG).show();
@@ -225,6 +225,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             return btn3.getText().toString() ;
         }
+        if(ActivePlayer == 9){
+            return "  ";
+        }
         Toast.makeText(this, "Reason can not be blank", Toast.LENGTH_SHORT).show();
         return "";
     }
@@ -232,7 +235,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        ActivePlayer++;
+        if(v.getId() == R.id.ResetButton){
+            Log.i("RESET", "onClick: ClickWork");
+            AlertDialog.Builder alertDialogBuilder1 = new AlertDialog.Builder(this);
+            alertDialogBuilder1.setTitle("Are You Sure You Want to Quit !!");
+            alertDialogBuilder1.setMessage("Press Yes to Continue" );
+            alertDialogBuilder1
+                    .setCancelable(false)
+                    .setPositiveButton("YES",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,int id) {
+                                    PackageManager packageManager = context.getPackageManager();
+                                    Intent intent = packageManager.getLaunchIntentForPackage(context.getPackageName());
+                                    ComponentName componentName = intent.getComponent();
+                                    Intent mainIntent = Intent.makeRestartActivityTask(componentName);
+                                    context.startActivity(mainIntent);
+                                    Runtime.getRuntime().exit(0);
+
+                                }
+                            })
+                    .setNegativeButton("NO",new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog,int id){
+                        }
+
+                    });
+
+            AlertDialog alertDialog1 = alertDialogBuilder1.create();
+
+            // show it
+            alertDialog1.show();
+        }
+        else {
+            ActivePlayer++;
+        }
         String A ;
         if(ActivePlayer % 2 == 0){
             Output.setText(Player1 + " " + "Plays");

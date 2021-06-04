@@ -137,12 +137,23 @@
 
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/ResetButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="30sp"
+        android:textSize="20sp"
+        android:text="Reset"/>
+
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textSize="40dp"
-        android:layout_marginTop="500px"
+        android:layout_marginTop="250px"
         android:text="Developed by Suryansh Shrivastava"/>
 
 </LinearLayout>
